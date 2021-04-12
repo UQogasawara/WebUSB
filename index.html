@@ -1,12 +1,40 @@
-
 <!DOCTYPE html>
 <html>
   <head>
-    <title>WebUSBサンプル</title>
+    <meta charset="UTF-8">
+    <title>
+      WebUSB Sample
+    </title>
   </head>
   <body>
-    <input type="button" value="button" id ="buttonClick">
-    <script src="usb.js"></script>
-  </body>
+    <input type="button" value="Connect" id ="Connect_btn">
+    <input type="button" value="DevList" id ="DevList_btn">
+    <script src="usb.js">
+    </script>
 
+    <p>
+       ↓ for debug ↓
+    </p>
+    
+    <table border="1">
+      <tr>
+        <th>メンバ</th>
+        <th>値</th>
+      </tr>
+      <tr>
+        <td id ="test1"></td>
+        <td id ="test2"></td>
+      </tr>
+      <tr>
+        <td>1234</td>
+        <td>5678</td>
+      </tr>
+    </table>
+
+    <p>
+       ↑ for debug ↑
+    </p>
+
+
+  </body>
 </html>
