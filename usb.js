@@ -1,7 +1,7 @@
   // グローバル変数
   let device;
-  test1 = "1";
-  
+  let DevInfotable = document.getElementById('DevInfoTbl');
+  let cells = DevInfotable.querySelectorAll('td');
   
   // 指定デバイスのフィルタ
   const filters = [ 
@@ -47,6 +47,7 @@
     }
     if (device !== undefined) {
       // Add |device| to the UI. 
+
       console.log("USB Ver "           + device.usbVersionMajor + "." + device.usbVersionMinor + device.usbVersionMinor);
       console.log("Class: 0x"          + device.deviceClass.toString(16));
       console.log("Subclass: 0x"       + device.deviceSubclass.toString(16));
@@ -60,6 +61,19 @@
 //      console.log("Product name: "   + device.configuration);
 //      console.log("Product name: "   + device.configurations);
       console.log("opened ? "          + device.opened);
+
+
+    cells[1].innerText=device.usbVersionMajor + "." + device.usbVersionMinor + device.usbVersionMinor
+    cells[3].innerText="0x"+device.deviceClass.toString(16)
+    cells[5].innerText="0x"+device.deviceSubclass.toString(16)
+    cells[7].innerText="0x"+device.deviceProtocol.toString(16)
+    cells[9].innerText="0x"+device.vendorId.toString(16)
+    cells[11].innerText="0x"+device.productId.toString(16)
+    cells[13].innerText="0x"+device.deviceVersionMajor + "." + device.deviceVersionMinor + device.deviceVersionSubminor
+    cells[15].innerText=device.manufacturerName
+    cells[17].innerText=device.productName
+    cells[19].innerText=device.serialNumber
+
       }
     }
   );
