@@ -8,61 +8,85 @@
   </head>
   <body>
     <input type="button" value="Connect" id ="Connect_btn">
-    <input type="button" value="DevList" id ="DevList_btn">
-
-    <p>
-       ↓ for debug ↓
-    </p>
+    <input type="button" value="DevInfo" id ="DevInfo_btn">
+    <input type="button" value="OpenDev" id ="OpenDev_btn">
     
-    <table border="5" id="DevInfoTbl">
-      <tr>
-        <th>メンバ</th>
-        <th>値</th>
-      </tr>
-      <tr>
+    <div id="ConsoleLog">
+      Console Log
+    </div>
+    <br>
+    
+    <div id ="DeviceDescriptor">
+      Device Descriptor
+      <table border="5" id="DevInfoTbl">
+        <tr>
+          <th>メンバ</th>
+          <th>値</th>
+        </tr>
+        <tr>
+  
+          <td>USB Ver</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Class</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Subclass</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Protocol</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>vendorId</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>productId</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Dev Ver</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>manufacturerName</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>productName</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>serialNumber</td>
+          <td>-</td>
+        </tr>
+      </table>
+    </div>
+    <br>
+    
 
-        <td>USB Ver</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>Class</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>Subclass</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>Protocol</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>vendorId</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>productId</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>Dev Ver</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>manufacturerName</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>productName</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>serialNumber</td>
-        <td>-</td>
-      </tr>
-    </table>
+
+    <div id ="ConfigurationDescriptor">
+      Configuration Descriptor
+      <table border="5" id="DevConfigTbl">
+        <tr>
+          <th>メンバ</th>
+          <th>値</th>
+        </tr>
+        <tr>
+          <td>ConfigValue</td>
+          <td>-</td>
+        </tr>
+      </table>
+    </div>
+
 
     <script src="usb.js"></script>
 
   </body>
 </html>
+
