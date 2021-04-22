@@ -11,14 +11,24 @@
     <input type="button" value="DevInfo" id ="DevInfo_btn">
     <input type="button" value="OpenDev" id ="OpenDev_btn">
     
-    <div id="ConsoleLog">
+
+    <div >
       Console Log
     </div>
-    <br>
+    <div id="ConsoleLog" style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">
+      ここにコンソールログが出力される。
+    </div>
+
+    <div >
+      EventShow
+    </div>
+    <div id="EventLog" style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px;">
+      ここに接続/切断イベントが出力される。
+    </div>
     
     <div id ="DeviceDescriptor">
       Device Descriptor
-      <table border="5" id="DevInfoTbl">
+      <table border="1" id="DevInfoTbl">
         <tr>
           <th>メンバ</th>
           <th>値</th>
@@ -67,26 +77,12 @@
       </table>
     </div>
     <br>
-    
-
-
+ 
     <div id ="ConfigurationDescriptor">
-      Configuration Descriptor
-      <table border="5" id="DevConfigTbl">
-        <tr>
-          <th>メンバ</th>
-          <th>値</th>
-        </tr>
-        <tr>
-          <td>ConfigValue</td>
-          <td>-</td>
-        </tr>
-      </table>
+      
     </div>
-
 
     <script src="usb.js"></script>
 
   </body>
 </html>
-
