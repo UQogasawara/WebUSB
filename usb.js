@@ -2,6 +2,7 @@
   let device;
   let DevInfoTable = document.getElementById('DevInfoTbl');
   let DevInfoCells = DevInfoTable.querySelectorAll('td');
+  let DevInfoClkFlg = false;
   
   // 指定デバイスのフィルタ
   const filters = [ 
@@ -34,6 +35,7 @@
       // Add |device| to the UI. 
       console.log('Connect_btn OK.');
       document.getElementById('ConsoleLog').innerText = "Connect_btn OK.";
+      DevInfoClkFlg = false;
       }
     }
   );
@@ -52,9 +54,13 @@
     }
     if (device !== undefined) {
       // Add |device| to the UI. 
-      
-      DevInfoShow();
+        if ( DevInfoClkFlg == false ) {
+          DevInfoShow();
+        }
+        DevInfoClkFlg = true;
       }
+    
+
     }
   );
   
@@ -219,3 +225,5 @@
       }
     }
   );
+
+
