@@ -113,52 +113,48 @@
       DevConfigAry.push("-");
       DevConfigAry.push("-");
       DevConfigAry.push("-");
-      for (var j = 0; j < DevInterfaceLen; j++) { 
-        DevAlterLen += device.configurations[i].interfaces[j].alternates.length;
-        DevConfigAry.push("-");
-        DevConfigAry.push("-");
-        DevConfigAry.push("InterfacesLength");
-        DevConfigAry.push(DevInterfaceLen);
-        DevConfigAry.push("-");
-        DevConfigAry.push("-");
-        for (var k = 0; k < DevAlterLen; k++) { 
-          DevEpLen += device.configurations[i].interfaces[j].alternates[k].endpoints.length;
-/* 
+      if ( DevInterfaceLen != 0 ) {
+        for (var j = 0; j < DevInterfaceLen; j++) { 
+          DevAlterLen += device.configurations[i].interfaces[j].alternates.length;
           DevConfigAry.push("-");
           DevConfigAry.push("-");
+          DevConfigAry.push("InterfacesLength");
+          DevConfigAry.push(DevInterfaceLen);
           DevConfigAry.push("-");
           DevConfigAry.push("-");
-          DevConfigAry.push("EpLen");
-          DevConfigAry.push(DevEpLen);
-*/
-          for (var m = 0; m < DevEpLen; m++) { 
-            DevEpNum  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].endpointNumber;
-            DevEpDir  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].direction;
-            DevEpType = device.configurations[i].interfaces[j].alternates[k].endpoints[m].type;
-
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("EpNum");
-            DevConfigAry.push(DevEpNum);
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("EpDir");
-            DevConfigAry.push(DevEpDir);
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("-");
-            DevConfigAry.push("EpType");
-            DevConfigAry.push(DevEpType);
+          if ( DevAlterLen != 0 ) {
+            for (var k = 0; k < DevAlterLen; k++) { 
+              DevEpLen += device.configurations[i].interfaces[j].alternates[k].endpoints.length;
+              if ( DevEpLen != 0 ) {
+                for (var m = 0; m < DevEpLen; m++) { 
+                  DevEpNum  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].endpointNumber;
+                  DevEpDir  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].direction;
+                  DevEpType = device.configurations[i].interfaces[j].alternates[k].endpoints[m].type;
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("EpNum");
+                  DevConfigAry.push(DevEpNum);
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("EpDir");
+                  DevConfigAry.push(DevEpDir);
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("-");
+                  DevConfigAry.push("EpType");
+                  DevConfigAry.push(DevEpType);
+                }
+              }
+            }
           }
         }
       }
     }
-    
   SumRows = DevConfigLen + DevInterfaceLen + DevAlterLen + (DevEpLen * 3)
   console.log("SumRows"         + SumRows);
   console.log("DevConfigLen"    + DevConfigLen);
@@ -225,5 +221,3 @@
       }
     }
   );
-
-
