@@ -2,7 +2,14 @@
   let device;
   let DevInfoTable = document.getElementById('DevInfoTbl');
   let DevInfoCells = DevInfoTable.querySelectorAll('td');
-  let DevInfoClkFlg = false;
+  let DevInfoShowFlg = false;
+
+  var row;
+  var cell;
+  var cellText;
+  var body;
+  var tbl;
+  var tblBody;
   
   // 指定デバイスのフィルタ
   const filters = [ 
@@ -12,8 +19,7 @@
     /* サンプル */
     // { vendorId: 0x1209, productId: 0xa850 }
     ];
-    
-  
+ 
   // Connect_btn イベント
   let Connect_btn = document.getElementById('Connect_btn');
   Connect_btn.addEventListener('click', async () => {
@@ -35,10 +41,24 @@
       // Add |device| to the UI. 
       console.log('Connect_btn OK.');
       document.getElementById('ConsoleLog').innerText = "Connect_btn OK.";
-      DevInfoClkFlg = false;
-      }
+      
     }
-  );
+    if (DevInfoShowFlg != false) {
+      body.removeChild(tbl);
+      document.getElementById('ConfigurationDescriptor').innerText = "";
+      DevInfoCells[1].innerText="-"
+      DevInfoCells[3].innerText="-"
+      DevInfoCells[5].innerText="-"
+      DevInfoCells[7].innerText="-"
+      DevInfoCells[9].innerText="-"
+      DevInfoCells[11].innerText="-"
+      DevInfoCells[13].innerText="-"
+      DevInfoCells[15].innerText="-"
+      DevInfoCells[17].innerText="-"
+      DevInfoCells[19].innerText="-"
+      DevInfoShowFlg = false;
+    }
+  });
   
   // DevInfo_btn イベント
   let DevInfo_btn = document.getElementById('DevInfo_btn');
@@ -54,13 +74,11 @@
     }
     if (device !== undefined) {
       // Add |device| to the UI. 
-        if ( DevInfoClkFlg == false ) {
+        if ( DevInfoShowFlg == false ) {
           DevInfoShow();
         }
-        DevInfoClkFlg = true;
       }
-    
-
+      DevInfoShowFlg = true;
     }
   );
   
@@ -94,11 +112,15 @@
     // 何行表示する必要があるのか計算する
     // 表示は configurations.length;
 
-    var SumRows;
+    var SumRows       = 0;
+    var SumInterfaces = 0;
+    var SumAlternates = 0;
+    var SumEndpoints  = 0;
+    
     var DevConfigLen     = device.configurations.length;
-    var DevInterfaceLen  = 0;
-    var DevAlterLen      = 0;
-    var DevEpLen         = 0;
+    var DevInterfaceLen;
+    var DevAlterLen;
+    var DevEpLen;
     var DevEpNum;
     var DevEpDir;
     var DevEpType;
@@ -106,75 +128,97 @@
     let DevConfigAry     = [];
     
     for (var i = 0; i < DevConfigLen; i++) { 
-      DevInterfaceLen += device.configurations[i].interfaces.length;
-      DevConfigAry.push("ConfigurationValue");
-      DevConfigAry.push(DevConfigLen);
+      DevInterfaceLen  = device.configurations[i].interfaces.length;
+      SumInterfaces   += DevInterfaceLen;
+      DevConfigAry.push("bConfigurationValue");
+      DevConfigAry.push(device.configurations[i].configurationValue);
       DevConfigAry.push("-");
       DevConfigAry.push("-");
       DevConfigAry.push("-");
       DevConfigAry.push("-");
-      if ( DevInterfaceLen != 0 ) {
-        for (var j = 0; j < DevInterfaceLen; j++) { 
-          DevAlterLen += device.configurations[i].interfaces[j].alternates.length;
+      DevConfigAry.push("-");
+      DevConfigAry.push("-");
+
+      for (var j = 0; j < DevInterfaceLen; j++) { 
+        DevAlterLen = device.configurations[i].interfaces[j].alternates.length;
+        SumAlternates += DevAlterLen;
+        DevConfigAry.push("-");
+        DevConfigAry.push("-");
+        DevConfigAry.push("bInterfaceNumber");
+        DevConfigAry.push(device.configurations[i].interfaces[j].interfaceNumber);
+        DevConfigAry.push("-");
+        DevConfigAry.push("-");
+        DevConfigAry.push("-");
+        DevConfigAry.push("-");
+        
+        for (var k = 0; k < DevAlterLen; k++) { 
+          DevEpLen = device.configurations[i].interfaces[j].alternates[k].endpoints.length;
+          SumEndpoints += DevEpLen;
+          
           DevConfigAry.push("-");
           DevConfigAry.push("-");
-          DevConfigAry.push("InterfacesLength");
-          DevConfigAry.push(DevInterfaceLen);
           DevConfigAry.push("-");
           DevConfigAry.push("-");
-          if ( DevAlterLen != 0 ) {
-            for (var k = 0; k < DevAlterLen; k++) { 
-              DevEpLen += device.configurations[i].interfaces[j].alternates[k].endpoints.length;
-              if ( DevEpLen != 0 ) {
-                for (var m = 0; m < DevEpLen; m++) { 
-                  DevEpNum  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].endpointNumber;
-                  DevEpDir  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].direction;
-                  DevEpType = device.configurations[i].interfaces[j].alternates[k].endpoints[m].type;
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("EpNum");
-                  DevConfigAry.push(DevEpNum);
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("EpDir");
-                  DevConfigAry.push(DevEpDir);
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("-");
-                  DevConfigAry.push("EpType");
-                  DevConfigAry.push(DevEpType);
-                }
-              }
-            }
+          DevConfigAry.push("bAlternateSetting");
+          DevConfigAry.push(device.configurations[i].interfaces[j].alternates[k].alternateSetting);
+          DevConfigAry.push("-");
+          DevConfigAry.push("-");
+          
+          
+          for (var m = 0; m < DevEpLen; m++) { 
+            DevEpNum  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].endpointNumber;
+            DevEpDir  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].direction;
+            DevEpType = device.configurations[i].interfaces[j].alternates[k].endpoints[m].type;
+
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("bEndpointAddress(NUM)");
+            DevConfigAry.push(DevEpNum);
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("bEndpointAddress(DIR)");
+            DevConfigAry.push(DevEpDir);
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("-");
+            DevConfigAry.push("bmAttributes.TransferType");
+            DevConfigAry.push(DevEpType);
+
           }
         }
       }
     }
-  SumRows = DevConfigLen + DevInterfaceLen + DevAlterLen + (DevEpLen * 3)
+    
+  SumRows = DevConfigLen + SumInterfaces + SumAlternates + (SumEndpoints * 3)
   console.log("SumRows"         + SumRows);
-  console.log("DevConfigLen"    + DevConfigLen);
-  console.log("DevInterfaceLen" + DevInterfaceLen);
-  console.log("DevAlterLen"     + DevAlterLen);
-  console.log("DevEpLen"        + DevEpLen);
+  console.log("SumInterfaces"    + SumInterfaces);
+  console.log("SumAlternates" + SumAlternates);
+  console.log("SumEndpoints"     + SumEndpoints);
 
   // body の取得
-  var body = document.getElementsByTagName("body")[0];
+  body = document.getElementsByTagName("body")[0];
 
   // table 作成
-  var tbl = document.createElement("table");
-  var tblBody = document.createElement("tbody");
+  tbl = document.createElement("table");
+  tblBody = document.createElement("tbody");
 
   // cell 作成
   for (var i = 0; i < SumRows-1; i++) {
-    var row = document.createElement("tr");
-    for (var j = 0; j < 6; j++) {
-      var cell = document.createElement("td");
-      var cellText = document.createTextNode(DevConfigAry[i*6+j]);
+    row = document.createElement("tr");
+    for (var j = 0; j < 8; j++) {
+      cell = document.createElement("td");
+      cellText = document.createTextNode(DevConfigAry[i*8+j]);
       cell.appendChild(cellText);
       row.appendChild(cell);
     }
@@ -204,7 +248,7 @@
   
   // 抜去イベントの登録
   navigator.usb.ondisconnect = disconnectFunction
-  
+ 
   
   // OpenDev_btn イベント
   let OpenDev_btn = document.getElementById('OpenDev_btn');
