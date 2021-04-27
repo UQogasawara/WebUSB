@@ -214,7 +214,7 @@
   tblBody = document.createElement("tbody");
 
   // cell 作成
-  for (var i = 0; i < SumRows-1; i++) {
+  for (var i = 0; i < SumRows; i++) {
     row = document.createElement("tr");
     for (var j = 0; j < 8; j++) {
       cell = document.createElement("td");
