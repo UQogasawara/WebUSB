@@ -3,7 +3,7 @@
   let DevInfoTable = document.getElementById('DevInfoTbl');
   let DevInfoCells = DevInfoTable.querySelectorAll('td');
   let DevInfoShowFlg = false;
-
+  let test123;
   var row;
   var cell;
   var cellText;
