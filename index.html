@@ -5,12 +5,82 @@
     <title>
       WebUSB Sample
     </title>
+    <link rel="stylesheet" href="usb.css">
   </head>
   <body>
     <input type="button" value="Connect" id ="Connect_btn">
-    <input type="button" value="DevInfo" id ="DevInfo_btn">
+    <input type="button" value="DevInfo" id ="DevInfo_btn"><br>
+
+    <br>
+
     <input type="button" value="OpenDev" id ="OpenDev_btn">
+    <input type="button" value="CloseDev" id ="CloseDev_btn"><br>
+
+    <br>
     
+    <input type="number" value="1" id ="SelectConfigNumber"> 
+    <input type="button" value="SelectConfigration" id ="SelectConfig_btn"><br>
+    （DevInfoボタン押下時の bConfigurationValue の値を入力してください）<br>
+    <br>
+
+    <input type="number" value="0" id ="ClaimInterfaceNumber">
+    <input type="button" value="ClaimInterface" id ="ClaimInterface_btn" >
+
+    <input type="number" value="0" id ="ReleaseInterfaceNumber">
+    <input type="button" value="ReleaseInterface" id ="ReleaseInterface_btn"><br>
+    （DevInfoボタン押下時の bInterfaceNumber の値を入力してください）<br>
+    <br>
+    
+    <input type="button" value="DTR, RTS" id ="DTR_RTS_btn" ><br>
+    DTR, RTS を 1 に設定することができます<br>
+    <br>
+    
+    シリアルポート設定<br>
+    ボーレート：
+    <input type="radio" name="dwDTERate" value=9600 checked>9600
+    <input type="radio" name="dwDTERate" value=19200>19200
+    <input type="radio" name="dwDTERate" value=38400>38400
+    <br>
+
+    ストップビット：
+    <input type="radio" name="bCharFormat" value="0" checked>1
+    <input type="radio" name="bCharFormat" value="1">1.5
+    <input type="radio" name="bCharFormat" value="2">2
+    <br>
+    
+    パリティ：
+    <input type="radio" name="bParityType" value="0" checked>None
+    <input type="radio" name="bParityType" value="1">Odd
+    <input type="radio" name="bParityType" value="2">Even
+    <input type="radio" name="bParityType" value="3">Mark
+    <input type="radio" name="bParityType" value="4">Space
+    <br>
+    
+    データ：
+    <input type="radio" name="bDataBits" value="8" checked>8
+    <input type="radio" name="bDataBits" value="7">7
+    <br>
+    
+    <input type="button" value="SerialSet" id ="SerialSet_btn" ><br>
+    シリアルポート設定を実行します<br>
+    <br>
+
+    
+    Endpoint
+    <input type="number" value="2" id ="BulkOutTransferEndpoint">
+    Data
+    <input type="text" name="in01" size="2" maxlength="1" id ="BulkOutTransferData">
+    <input type="button" value="BulkOutTransfer" id ="BulkOutTransfer_btn"><br>
+    
+    Endpoint
+    <input type="number" value="1" id ="BulkInTransferEndpoint">
+    Length
+    <input type="number" value="1" id ="BulkInTransferLength">
+    Data
+    <input type="text" name="in01" size="2" maxlength="1" id ="BulkInTransferData" readonly >
+    <input type="button" value="BulkInTransfer" id ="BulkInTransfer_btn"><br>
+    
+    <br>
 
     <div >
       Console Log
@@ -83,6 +153,5 @@
     </div>
 
     <script src="usb.js"></script>
-
   </body>
 </html>
