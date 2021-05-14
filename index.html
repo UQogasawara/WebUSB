@@ -18,15 +18,15 @@
 
     <br>
     
-    <input type="number" value="1" id ="SelectConfigNumber"> 
+    <input type="number" value="1" min=0 id ="SelectConfigNumber"> 
     <input type="button" value="SelectConfigration" id ="SelectConfig_btn"><br>
     （DevInfoボタン押下時の bConfigurationValue の値を入力してください）<br>
     <br>
 
-    <input type="number" value="0" id ="ClaimInterfaceNumber">
+    <input type="number" value="0" min=0 id ="ClaimInterfaceNumber">
     <input type="button" value="ClaimInterface" id ="ClaimInterface_btn" >
 
-    <input type="number" value="0" id ="ReleaseInterfaceNumber">
+    <input type="number" value="0" min=0 id ="ReleaseInterfaceNumber">
     <input type="button" value="ReleaseInterface" id ="ReleaseInterface_btn"><br>
     （DevInfoボタン押下時の bInterfaceNumber の値を入力してください）<br>
     <br>
@@ -67,17 +67,17 @@
 
     
     Endpoint
-    <input type="number" value="2" id ="BulkOutTransferEndpoint">
+    <input type="number" value="2" min=0 id ="BulkOutTransferEndpoint">
     Data
-    <input type="text" name="in01" size="2" maxlength="1" id ="BulkOutTransferData">
+    <input type="text" name="in01" size="10" maxlength="10" id ="BulkOutTransferData">
     <input type="button" value="BulkOutTransfer" id ="BulkOutTransfer_btn"><br>
     
     Endpoint
-    <input type="number" value="1" id ="BulkInTransferEndpoint">
+    <input type="number" value="1" min=0 id ="BulkInTransferEndpoint">
     Length
-    <input type="number" value="1" id ="BulkInTransferLength">
+    <input type="number" value="10" min=0 id ="BulkInTransferLength">
     Data
-    <input type="text" name="in01" size="2" maxlength="1" id ="BulkInTransferData" readonly >
+    <input type="text" name="in01" size="10" maxlength="10" id ="BulkInTransferData" readonly >
     <input type="button" value="BulkInTransfer" id ="BulkInTransfer_btn"><br>
     
     <br>
