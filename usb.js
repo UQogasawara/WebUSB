@@ -1,4 +1,4 @@
- // グローバル変数
+  // グローバル変数
   let device;
   let DevInfoTable = document.getElementById('DevInfoTbl');
   let DevInfoCells = DevInfoTable.querySelectorAll('td');
@@ -16,8 +16,6 @@
     /* filters を空にした場合、接続しているすべてのデバイスが表示される */
     /* 使っているマウス */
     // { vendorId: 0x04ca, productId: 0x0061 }, 
-    /* サンプル */
-    // { vendorId: 0x1209, productId: 0xa850 }
     ];
  
   // Connect_btn イベント
@@ -26,24 +24,29 @@
     try { 
       console.log('Connect_btn try.');
       document.getElementById('ConsoleLog').innerText = "Connect_btn try.";
+      // USBデバイスのリクエスト
+      // USBDevice 型を得る。WebUSB は何をするにも USBDevice 型が必要
       device = await navigator.usb.requestDevice(
         {
+          // filter は空なので接続デバイス全てを表示する
           filters: filters
         }
       )
     }
     catch (e) { 
-      // No device was selected.
+      // デバイスが見つからなかった場合
       console.log("Connect_btn There is no device. " + e);
       document.getElementById('ConsoleLog').innerText = "Connect_btn There is no device. " + e;
     }
     if (device !== undefined) {
-      // Add |device| to the UI. 
+      // デバイスが見つかった
+      // ここでは何も処理をしない。全ての処理はボタントリガーにする
       console.log('Connect_btn OK.');
       document.getElementById('ConsoleLog').innerText = "Connect_btn OK.";
       
     }
     if (DevInfoShowFlg != false) {
+      // DeviceDescriptor, ConfigurationDescriptor のテーブルを削除する
       body.removeChild(tbl);
       document.getElementById('ConfigurationDescriptor').innerText = "";
       DevInfoCells[1].innerText="-"
@@ -68,13 +71,14 @@
       document.getElementById('ConsoleLog').innerText = "DevInfo_btn try.";
     }
     catch (e) { 
-      // No device was selected.
+      // try でエラーになることがないので通常このパスには入らない。
       console.log("DevInfo_btn There is no device. " + e);
       document.getElementById('ConsoleLog').innerText = "DevInfo_btn There is no device. " + e;
     }
     if (device !== undefined) {
-      // Add |device| to the UI. 
+      // Connectボタン押下済みであればこのパスに入る
         if ( DevInfoShowFlg == false ) {
+          // DeviceDescriptor, ConfigurationDescriptor のテーブルを表示する
           DevInfoShow();
         }
       }
@@ -82,7 +86,7 @@
     }
   );
   
-  // 接続時処理
+  // デバッグ用の表示処理
   function DevInfoShow() {
     document.getElementById('ConfigurationDescriptor').innerText = "Configuration Descriptor";
     
@@ -98,6 +102,9 @@
     console.log("serialNumber: "     + device.serialNumber);
     console.log("opened ? "          + device.opened);
     
+    // DevInfoCells は DeviceDescriptor の表。偶数番はメンバとして html で記載している。奇数番のみここで取得する
+    // 全て device 型から引っ張ってこれる
+    // デバイスに依存しないので静的に生成しておく
     DevInfoCells[1].innerText=device.usbVersionMajor + "." + device.usbVersionMinor + device.usbVersionMinor
     DevInfoCells[3].innerText="0x"+device.deviceClass.toString(16)
     DevInfoCells[5].innerText="0x"+device.deviceSubclass.toString(16)
@@ -109,9 +116,7 @@
     DevInfoCells[17].innerText=device.productName
     DevInfoCells[19].innerText=device.serialNumber
     
-    // 何行表示する必要があるのか計算する
-    // 表示は configurations.length;
-
+    // デバイスによって ConfigurationDescriptor は異なるので表は動的に生成する
     var SumRows       = 0;
     var SumInterfaces = 0;
     var SumAlternates = 0;
@@ -128,6 +133,7 @@
     let DevConfigAry     = [];
     
     for (var i = 0; i < DevConfigLen; i++) { 
+      // bConfigurationValue について記載
       DevInterfaceLen  = device.configurations[i].interfaces.length;
       SumInterfaces   += DevInterfaceLen;
       DevConfigAry.push("bConfigurationValue");
@@ -140,6 +146,7 @@
       DevConfigAry.push("-");
 
       for (var j = 0; j < DevInterfaceLen; j++) { 
+        // bInterfaceNumber について記載
         DevAlterLen = device.configurations[i].interfaces[j].alternates.length;
         SumAlternates += DevAlterLen;
         DevConfigAry.push("-");
@@ -152,6 +159,7 @@
         DevConfigAry.push("-");
         
         for (var k = 0; k < DevAlterLen; k++) { 
+          // bAlternateSetting について記載
           DevEpLen = device.configurations[i].interfaces[j].alternates[k].endpoints.length;
           SumEndpoints += DevEpLen;
           
@@ -164,12 +172,12 @@
           DevConfigAry.push("-");
           DevConfigAry.push("-");
           
-          
           for (var m = 0; m < DevEpLen; m++) { 
+            // bEndpoint について記載
             DevEpNum  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].endpointNumber;
             DevEpDir  = device.configurations[i].interfaces[j].alternates[k].endpoints[m].direction;
             DevEpType = device.configurations[i].interfaces[j].alternates[k].endpoints[m].type;
-
+            
             DevConfigAry.push("-");
             DevConfigAry.push("-");
             DevConfigAry.push("-");
@@ -194,42 +202,40 @@
             DevConfigAry.push("-");
             DevConfigAry.push("bmAttributes.TransferType");
             DevConfigAry.push(DevEpType);
-
           }
         }
       }
     }
     
-  SumRows = DevConfigLen + SumInterfaces + SumAlternates + (SumEndpoints * 3)
-  console.log("SumRows"         + SumRows);
-  console.log("SumInterfaces"    + SumInterfaces);
-  console.log("SumAlternates" + SumAlternates);
-  console.log("SumEndpoints"     + SumEndpoints);
-
-  // body の取得
-  body = document.getElementsByTagName("body")[0];
-
-  // table 作成
-  tbl = document.createElement("table");
-  tblBody = document.createElement("tbody");
-
-  // cell 作成
-  for (var i = 0; i < SumRows; i++) {
-    row = document.createElement("tr");
-    for (var j = 0; j < 8; j++) {
-      cell = document.createElement("td");
-      cellText = document.createTextNode(DevConfigAry[i*8+j]);
-      cell.appendChild(cellText);
-      row.appendChild(cell);
+    // 何行のテーブルにするのか決める
+    SumRows = DevConfigLen + SumInterfaces + SumAlternates + (SumEndpoints * 3)
+    console.log("SumRows"         + SumRows);
+    console.log("SumInterfaces"    + SumInterfaces);
+    console.log("SumAlternates" + SumAlternates);
+    console.log("SumEndpoints"     + SumEndpoints);
+    
+    // body の取得
+    body = document.getElementsByTagName("body")[0];
+    
+    // table 作成
+    tbl = document.createElement("table");
+    tblBody = document.createElement("tbody");
+    
+    // cell 作成
+    for (var i = 0; i < SumRows; i++) {
+      row = document.createElement("tr");
+      for (var j = 0; j < 8; j++) {
+        cell = document.createElement("td");
+        cellText = document.createTextNode(DevConfigAry[i*8+j]);
+        cell.appendChild(cellText);
+        row.appendChild(cell);
+      }
+      
+      tblBody.appendChild(row);
     }
-
-    tblBody.appendChild(row);
-  }
-
-  tbl.appendChild(tblBody);
-  body.appendChild(tbl);
-  tbl.setAttribute("border", "2");
-
+    tbl.appendChild(tblBody);
+    body.appendChild(tbl);
+    tbl.setAttribute("border", "2");
   }
     
   // 接続時処理
@@ -248,7 +254,6 @@
   
   // 抜去イベントの登録
   navigator.usb.ondisconnect = disconnectFunction
- 
   
   // OpenDev_btn イベント
   let OpenDev_btn = document.getElementById('OpenDev_btn');
@@ -256,10 +261,12 @@
     try { 
       console.log('OpenDev_btn try.');
       document.getElementById('ConsoleLog').innerText = "OpenDev_btn try.";
+      // オープンの処理
+      // Windows の場合は Winusb.sys を使わないとエラーになる。Zading や .inf で回避可能
       await device.open()
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
@@ -272,10 +279,11 @@
     try { 
       console.log('CloseDev_btn try.');
       document.getElementById('ConsoleLog').innerText = "CloseDev_btn try.";
+      // クローズ処理
       await device.close()
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
@@ -289,10 +297,11 @@
       let SelectConfigNumber = document.getElementById('SelectConfigNumber').value;
       console.log('SelectConfig_btn try.');
       document.getElementById('ConsoleLog').innerText = "SelectConfig_btn try.";
+      // コンフィグレーションの選択
       await device.selectConfiguration(SelectConfigNumber)
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
@@ -306,10 +315,13 @@
       let ClaimInterfaceNumber = document.getElementById('ClaimInterfaceNumber').value;
       console.log('ClaimInterface_btn try.');
       document.getElementById('ConsoleLog').innerText = "ClaimInterface_btn try.";
+      // インターフェースの選択
+      // HID はエラーになる
+      // VUC や CDC-ACM などであればエラー回避できる
       await device.claimInterface(ClaimInterfaceNumber)
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
@@ -323,10 +335,11 @@
       let ReleaseInterfaceNumber = document.getElementById('ReleaseInterfaceNumber').value;
       console.log('ReleaseInterface_btn try.');
       document.getElementById('ConsoleLog').innerText = "ReleaseInterface_btn try.";
+      // インターフェースの選択
       await device.releaseInterface(ReleaseInterfaceNumber)
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
@@ -340,6 +353,7 @@
       console.log('DTR_RTS_btn try.');
       document.getElementById('ConsoleLog').innerText = "DTR_RTS_btn try.";
       
+      // コントロール転送 DTR, RTS を 1 に設定する
       await device.controlTransferOut({
         requestType:'class',
         recipient: 'interface',
@@ -350,13 +364,14 @@
       
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
     }
   );
-
+  
+  // 10進数 ⇒ 16進数変換
   function toHex(v) {
     return '0x' + (('0000' + v.toString(16).toUpperCase()).substr(-4));
   }
@@ -374,6 +389,7 @@
       var bDataBits;
       
       // ボーレート の設定
+      // ラジオボタンから入力を取得する
       var element = document.getElementsByName('dwDTERate');
       for ( var a="", i=element.length; i--; ) {
         if ( element[i].checked ) {
@@ -409,6 +425,7 @@
       var borate;
       
       // ボーレート16進数変換
+      // toHex(dwDTERate) とすると 0x9600 になる？文字列と数値の変換とかで回避できる？
       switch(dwDTERate){
         case "9600":
           borate = toHex(9600);
@@ -429,6 +446,7 @@
       var borate_2 = ((borate & 0x00FF0000) >> 16);
       var borate_3 = ((borate & 0xFF000000) >> 24);
       
+      // ラジオボタンのデータからコントロール転送に使うパケットを用意
       var SerialSet_packet = Uint8Array.of(
         borate_0, 
         borate_1, 
@@ -437,7 +455,8 @@
         bCharFormat, 
         bParityType, 
         bDataBits)
-
+        
+      // コントロール転送 シリアルの設定をする
       await device.controlTransferOut({
         requestType:'class',
         recipient: 'interface',
@@ -448,37 +467,52 @@
       
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
     }
   );
 
-
-  function ascii (a) { return a.charCodeAt(0); }
-
   // BulkOutTransfer_btn イベント
-  // 暫定的に 1Byte 固定にしている
   let BulkOutTransfer_btn = document.getElementById('BulkOutTransfer_btn');
   BulkOutTransfer_btn.addEventListener('click', async () => {
     try { 
       let BulkOutTransferEndpoint = document.getElementById('BulkOutTransferEndpoint').value;
       let BulkOutTransferData = document.getElementById('BulkOutTransferData').value;
-
-      const BulkOutAry = Uint8Array.of(BulkOutTransferData)
+      var array = [];
       
-      for ( var a="", i=BulkOutTransferData.length; i--; ) {
-        var asciiData = ascii(BulkOutTransferData);
-//        BulkOutAry.push(asciiData);
+      // データ長に合わせたバッファを作成
+      var buffer = new ArrayBuffer(BulkOutTransferData.length);
+      // バッファからデータビューを作成
+      var view = new DataView(buffer);
+      var offset = 0;
+      
+      for ( var tmp = BulkOutTransferData, i=BulkOutTransferData.length; i--; ) {
+        
+        // 先頭取り出し
+        var CutData=tmp.slice( 0, 1 )
+        
+        // 取り出した文字を view に設定
+        // CutData は "a" などが入るのでアスキー変換が必要
+        view.setUint8(offset, CutData.charCodeAt(0));
+        offset += 1;
+        
+        // 先頭削除
+        var tmp = tmp.slice( 1 );
       }
+      
+      // 完成した buffer を Uint8Array として転送する
+      var result = new Uint8Array(buffer);
       
       console.log('BulkOutTransfer_btn try.');
       document.getElementById('ConsoleLog').innerText = "BulkOutTransfer_btn try.";
-      await device.transferOut(BulkOutTransferEndpoint,BulkOutAry)
+      
+      // BulkOut転送 
+      await device.transferOut(BulkOutTransferEndpoint,result)
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
@@ -493,19 +527,30 @@
       let BulkInTransferLength = document.getElementById('BulkInTransferLength').value;
       let BulkInTransferData = document.getElementById('BulkInTransferData').value;
       
+      // BulkInTransferData の部分を空にしておく
+      document.getElementById('BulkInTransferData').value = "";
+      
       console.log('BulkInTransfer_btn try.');
       document.getElementById('ConsoleLog').innerText = "BulkInTransfer_btn try.";
       USBInTransferResult = await device.transferIn(BulkInTransferEndpoint,BulkInTransferLength)
       
-      document.getElementById('BulkInTransferData').value = String.fromCharCode(USBInTransferResult.data.getUint8());
-//      var tmp = toHex(USBInTransferResult.data.getUint8());
-//      document.getElementById('BulkInTransferData').value = tmp;
+      var BulkInStr = "";
+      for ( var tmp = USBInTransferResult.data, i=0; i<USBInTransferResult.data.byteLength; i++ ) {
+        
+        // tmp.getUint8(i) で 先頭から 1Byte 取得
+        // String.fromCharCode() でアスキー変換し、BulkInStr に文字列結合する
+        BulkInStr += String.fromCharCode(tmp.getUint8(i));
+        
+      }
+      
+      // BulkInStr を BulkInTransferData の枠に出力する
+      document.getElementById('BulkInTransferData').value = BulkInStr;
+      
     }
     catch (e) { 
-      // No device was selected.
+      // エラーパス
       console.log(" " + e);
       document.getElementById('ConsoleLog').innerText = e;
       }
     }
   );
-
