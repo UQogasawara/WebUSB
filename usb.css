@@ -1,3 +1,54 @@
 input[type="number"] {
   width: 30px;
 }
+
+input[type="button"] {
+  width: 150px;
+}
+
+.SerialSet {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 150px;
+}
+
+.DTR_RTS {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 90px;
+}
+
+.Interface {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 90px;
+}
+
+.Configration {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 90px;
+}
+
+.Open_Close {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 60px;
+}
+.Connect_DevInfo {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 60px;
+}
+
+.BulkOut {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 60px;
+}
+
+.BulkIn {
+  border: 2px solid #000000;
+  width: 600px;
+  height: 60px;
+}
