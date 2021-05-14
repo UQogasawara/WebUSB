@@ -8,34 +8,47 @@
     <link rel="stylesheet" href="usb.css">
   </head>
   <body>
+    <div class = "Connect_DevInfo">
+    デバイス接続・情報取得<br>
     <input type="button" value="Connect" id ="Connect_btn">
     <input type="button" value="DevInfo" id ="DevInfo_btn"><br>
-
     <br>
+    </div>
 
+    <div class = "Open_Close">
+    デバイスオープン・クローズ<br>
     <input type="button" value="OpenDev" id ="OpenDev_btn">
     <input type="button" value="CloseDev" id ="CloseDev_btn"><br>
-
     <br>
-    
+    </div>
+
+    <div class = "Configration">
+    Configration 選択<br>
     <input type="number" value="1" min=0 id ="SelectConfigNumber"> 
     <input type="button" value="SelectConfigration" id ="SelectConfig_btn"><br>
     （DevInfoボタン押下時の bConfigurationValue の値を入力してください）<br>
     <br>
+    </div>
 
+    <div class = "Interface">
+    Interface 選択<br>
     <input type="number" value="0" min=0 id ="ClaimInterfaceNumber">
     <input type="button" value="ClaimInterface" id ="ClaimInterface_btn" >
-
     <input type="number" value="0" min=0 id ="ReleaseInterfaceNumber">
     <input type="button" value="ReleaseInterface" id ="ReleaseInterface_btn"><br>
     （DevInfoボタン押下時の bInterfaceNumber の値を入力してください）<br>
     <br>
+    </div>
     
+    <div class = "DTR_RTS">
+    DTR, RTS 設定<br>
     <input type="button" value="DTR, RTS" id ="DTR_RTS_btn" ><br>
-    DTR, RTS を 1 に設定することができます<br>
+    （DTR, RTSを 1 に設定することができます）<br>
     <br>
+    </div>
     
-    シリアルポート設定<br>
+    <div class = "SerialSet">
+    シリアルポート設定  <input type="button" value="SerialSet" id ="SerialSet_btn" ><br>
     ボーレート：
     <input type="radio" name="dwDTERate" value=9600 checked>9600
     <input type="radio" name="dwDTERate" value=19200>19200
@@ -61,17 +74,19 @@
     <input type="radio" name="bDataBits" value="7">7
     <br>
     
-    <input type="button" value="SerialSet" id ="SerialSet_btn" ><br>
-    シリアルポート設定を実行します<br>
-    <br>
+    </div>
 
-    
+    <div class = "BulkOut">
+    Bulk-Out 転送<br>
     Endpoint
     <input type="number" value="2" min=0 id ="BulkOutTransferEndpoint">
     Data
     <input type="text" name="in01" size="10" maxlength="10" id ="BulkOutTransferData">
     <input type="button" value="BulkOutTransfer" id ="BulkOutTransfer_btn"><br>
+    </div>
     
+    <div class = "BulkIn">
+    Bulk-In 転送<br>
     Endpoint
     <input type="number" value="1" min=0 id ="BulkInTransferEndpoint">
     Length
@@ -79,6 +94,7 @@
     Data
     <input type="text" name="in01" size="10" maxlength="10" id ="BulkInTransferData" readonly >
     <input type="button" value="BulkInTransfer" id ="BulkInTransfer_btn"><br>
+    </div>
     
     <br>
 
