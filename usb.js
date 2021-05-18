@@ -509,7 +509,7 @@
       document.getElementById('ConsoleLog').innerText = "BulkOutTransfer_btn try.";
       
       // BulkOut転送 
-      await device.transferOut(BulkOutTransferEndpoint,result)
+      USBOutTransferResult = await device.transferOut(BulkOutTransferEndpoint,result)
     }
     catch (e) { 
       // エラーパス
